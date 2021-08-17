@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,7 +21,8 @@ class RegisterFormType extends AbstractType
                 'label' => 'Votre prenom',
                 'attr' => [
                     'placeholder' => 'Jean'
-                ]
+                ],
+                'required' => true
             ])
             ->add('lastname', TextType::class, [
                 'label' => 'Votre nom',
@@ -34,12 +36,12 @@ class RegisterFormType extends AbstractType
                     'placeholder' => 'jean.dupont@mail.com'
                 ]
             ])
-            ->add('password', PasswordType::class, [
-                'label' => 'Votre mot de passe'
-            ])
-            ->add('password_confirm', PasswordType::class, [
-                'label' => 'Confirmez votre mot de passe',
-                'mapped' => false
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'required' => true,
+                'invalid_message' => 'Les mots de passe ne sont pas identiques',
+                'first_options' => ['label' => 'Votre mot de passe'],
+                'second_options' => ['label' => 'Confirmez votre mot de passe']
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer'
